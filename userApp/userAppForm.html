@@ -41,10 +41,9 @@
   <br>
   <div class="container" id="Loggin" style="display: flex; justify-content: center;">
     <div class=" col align-self-center col-sm-4">
-      <form action="" method="POST" id="form" style="border-style: solid; padding: 10px; border-color: darkgray;"
-        onsubmit="submitForm(); return false;">
+      <form action="" method="POST" id="form" style="border-style: solid; padding: 10px; border-color: darkgray;" onsubmit="submitForm(); return false;">
         <div class="mb-3">
-          <label for="formUsername" class="form-label">Nomasi bre de Usuario: </label>
+          <label for="formUsername" class="form-label">Nombre de Usuario: </label>
           <input type="text" class="form-control" id="formUsername" name="form-username" placeholder="Nombre de Usuario"
             required>
         </div>
@@ -77,26 +76,28 @@
 <script>
 
   function submitForm() {
-    let form = document.forms[0];
-    let formData = {
-      username: form.elements[0].value,
-      password: form.elements[1].value,
-      email: form.elements[2].value,
-      role: form.elements[3].value,
-      owner: null,
-      official: null,
-      veterinary: null,
-      case: form.elements[4].value
-    };
+    let form = document.getElementById('form');
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
         xhr.onload = function () {
-          console.log(" qqqqq");
+          let requestStatus= xhr.status;
+          if(requestStatus==201){
+            alert("Usuario guardado correctamente");
+            window.location.href= "../index.html";
+          }else if(requestStatus==406){
+            alert("the username already exits");
+            form.reset();
+          }else if(requestStatus==400){
+            alert("Oops! some error ocurr during your form submited, please try again")
+            form.reset();
+          }
         }
       }
-    }; xhr.open('POST', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/userApp');
-    xhr.send(formData);
-  }</script>
+    };
+    xhr.open('POST', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/userApp');
+    xhr.send(new FormData(form));
+  }
+  </script>
 
 </html>
