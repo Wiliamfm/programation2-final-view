@@ -4,9 +4,153 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
   <title>Veterinaria</title>
 </head>
+
 <body>
-  
+
+  <div class="container" id="navBar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../resources/logo.jpg" alt="logo.jpg" width="100" height="100">
+          Ciudadanos de 4 Patas
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="../owner/ownerForm.html">Crear Propietario</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="./veterinaryForm.html">Crear
+                Veterinaria</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+ 
+  <div class="container" style="border-style: solid; padding: 10px;">
+    <div class="container">
+      <h2 class="text-center">Información de la Veterinaria</h2>
+      <br>
+    </div>
+    <div class="container">
+      <h3>Nombre:</h3>
+      <br>
+      <h3>Dirección:</h3>
+      <br>
+      <h3>Localidad:</h3>
+    </div>
+    <br>
+    <div class="container" style="padding: 10px;">
+      <button class='btn btn-primary' onclick="modify()">Modificar Información</button>
+      <button class="btn btn-primary" onclick="createVisit()">Crear Visita</button>
+    </div>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="container">
+    <table class="table" id="tableVisits">
+      <thead>
+        <tr>
+          <th>
+            Fecha
+          </th>
+          <th>
+            Tipo
+          </th>
+          <th>
+            Descripción
+          </th>
+          <th>
+            petId
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
 </body>
+
+<script>
+  xl= new XMLHttpRequest();
+  userApp= JSON.parse(window.sessionStorage.getItem('userApp'));
+  window.sessionStorage.removeItem("petId");
+
+  xl.onreadystatechange= function(){
+    if(this.readyState==4){
+      xl.onload= function(){
+        if(xl.status==406){
+          alert("No se ha registrado como Propietario.\nSerá redireccionado para que pueda registrarse");
+          window.location.href= "./ownerForm.html";
+        }else if(xl.status==200){
+          let veterinary= JSON.parse(xl.responseText);
+          window.sessionStorage.setItem("veterinary", xl.responseText);
+          document.getElementsByTagName('h3')[0].innerHTML="Nombre: "+veterinary.name;
+          document.getElementsByTagName('h3')[1].innerHTML="Dirección: "+veterinary.address;
+          document.getElementsByTagName('h3')[2].innerHTML="Localidad: "+veterinary.neighborhood;
+          showPets('tableVisits', ['createdAt', 'type', 'description', 'petId'], []);
+        }
+      }
+    }
+  };
+
+  xl.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/veterinary/'+userApp.username);
+  xl.send();
+
+  function modify(){
+    window.location.href="./veterinaryFormModify.html";
+  }
+
+  function showPets(elementId, columns, actions){
+    xml= new XMLHttpRequest();
+    xml.onreadystatechange= function(){
+      if(xml.readyState==4){
+        if(xml.status==200){
+          let visits= JSON.parse(xml.responseText);
+          let tableBody= document.getElementById(elementId).getElementsByTagName('tbody')[0];
+
+          visits.map(v=>{
+            let newRow= tableBody.insertRow();
+
+            columns.map(c=>{
+              let cell= newRow.insertCell();
+              let text= document.createTextNode(v[c]);
+              cell.appendChild(text);
+            });
+          });
+        }else{
+          alert("Error cargando las visitas");
+        }
+      }
+    }
+    xml.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/veterinary/'+userApp.username+'/visits');
+    xml.send();
+  }
+  
+  function createVisit(){
+    location.href="../owner/petIndex.html";
+  }
+
+</script>
+
 </html>

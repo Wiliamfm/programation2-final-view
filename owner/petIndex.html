@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./ownerIndex.html">Inicio</a>
+              <a class="nav-link active" aria-current="page" href="../veterinary/veterinaryIndex.html">Inicio</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="./ownerForm.html">Crear Propietario</a>
@@ -44,19 +44,57 @@
 
 
   <div class="container">
-    <button onclick="window.location.href='./petForm.html';">Crear Mascota</button>
+    <table class="table" id="tablePets">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Microship
+          </th>
+          <th>
+            Especie
+          </th>
+          <th>
+            Raza
+          </th>
+          <th>
+            Tamaño
+          </th>
+          <th>
+            Género
+          </th>
+          <th>
+            Fotografía
+          </th>
+          <th>
+            Propietario Id
+          </th>
+          <th>
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
   </div>
   
 </body>
 
 <script>
-  let userApp= JSON.stringify(window.sessionStorage.getItem("userApp"));
+  sessionStorage.removeItem("petId");
+  sessionStorage.removeItem("vetId");
+  let userApp= JSON.parse(window.sessionStorage.getItem("userApp"));
   let xhr= new XMLHttpRequest();
   function makeTable(elementId, columns, actions){
     xhr.onreadystatechange= function(){
       if(xhr.readyState==4){
+        if(xhr.status==200){
         let pet= JSON.parse(xhr.responseText);
-        let tableBody= document.getElementById("talbePets").getElementsByTagName("tbody")[0];
+        let tableBody= document.getElementById(elementId).getElementsByTagName("tbody")[0];
 
         pet.map(p => {
           let newRow= tableBody.insertRow();
@@ -67,21 +105,26 @@
             cell.appendChild(text);
           });
 
-          if(actions.includes("createCase")){
+          if(actions.includes("createVisit")){
             let cell= newRow.insertCell();
             let action= document.createElement('button');
-            action.setAttribute('onclick', 'location.href=""');
-            let text= document.createTextNode("Crear Caso");
+            action.setAttribute('onclick', 'location.href="../veterinary/visitForm.html";sessionStorage.setItem("petId", '+p.id+');');
+            let text= document.createTextNode("Crear Visita");
             action.appendChild(text);
             cell.appendChild(action);
           }
         });
+        }else{
+          alert("error cargando las mascotas: " +xhr.responseText);
+        }
       }
     }
+    xhr.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/userApp/pets');
+    xhr.send();
   }
 
-  xhr.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/'+userApp.username+'/owner/pets');
-  xhr.send();
+  makeTable('tablePets', ['name', 'microship', 'specie', 'race', 'size', 'sex', 'picture', 'ownerId'], ['createVisit']);
+
 </script>
 
 </html>

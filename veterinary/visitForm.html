@@ -29,6 +29,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="./veterinaryIndex.html">Inicio</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="../owner/ownerForm.html">Crear Propietario</a>
             </li>
             <li class="nav-item">
@@ -40,13 +43,19 @@
     </nav>
   </div>
 
+  <div class="container text-center">
+    <h1>Registro de Visitas</h1>
+  </div>
+
+  <br>
+  <br>
 
   <div class="container" id="Loggin" style="display: flex; justify-content: center;">
     <div class=" col align-self-center col-sm-4">
-      <form action="" method="POST" id="form" style="border-style: solid; padding: 10px; border-color: darkgray;">
+      <form action="" method="POST" id="form" style="border-style: solid; padding: 10px; border-color: darkgray;" onsubmit="submitForm(); return false">
         <div class="mb-3">
           <label for="formType" class="form-label">Tipo: </label>
-          <select name="formType" id="formType">
+          <select name="form-type" id="formType">
             <option value="vacunation">Vacunación</option>
             <option value="desparasitation">Desparacitación</option>
             <option value="urgency">Urgencia</option>
@@ -57,7 +66,7 @@
         </div>
         <div class="mb-3">
           <label for="formDescription" class="form-label">Descripción: </label>
-          <input type="text" class="form-control" id="formDescription" placeholder="Descripción" required>
+          <input type="text" class="form-control" id="formDescription" name="form-description" placeholder="Descripción" required>
         </div>
         <div class="mb-3">
           <input type="submit" value="Crear Propietario">
@@ -67,5 +76,29 @@
   </div>
 
 </body>
+
+<script>
+  xml= new XMLHttpRequest();
+  let form= document.getElementById("form");
+  let userApp= JSON.parse(window.sessionStorage.getItem("userApp"));
+
+  function submitForm(){
+    xml.onreadystatechange= function(){
+      if(xml.readyState==4){
+        if(xml.status==201){
+        alert("Visita creada con éxito");
+        window.sessionStorage.removeItem('petId');
+        window.location.href='./veterinaryIndex.html';
+        }else{
+          window.sessionStorage.removeItem('petId');
+          alert("Ha ocurrido un error: " +xml.responseText);
+          window.location.href='../owner/petIndex.html';
+        }
+      }
+    }
+    xml.open("POST", 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/veterinary/'+userApp.username+'/visits/'+sessionStorage.getItem("petId"));
+    xml.send(new FormData(form));
+  }
+</script>
 
 </html>

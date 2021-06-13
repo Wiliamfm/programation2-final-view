@@ -29,13 +29,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./ownerIndex.html">Inicio</a>
+              <a class="nav-link active" aria-current="page" href="./veterinaryIndex.html">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./ownerForm.html">Crear Propietario</a>
+              <a class="nav-link active" aria-current="page" href="../owner/ownerForm.html">Crear Propietario</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="../veterinary/veterinaryForm.html">Crear
+              <a class="nav-link active" aria-current="page" href="./veterinaryForm.html">Crear
                 Veterinaria</a>
             </li>
           </ul>
@@ -60,9 +60,8 @@
           <label for="formNeighborhood" class="form-label">Localidad: </label>
           <input type="text" class="form-control" id="formNeighborhood" name="form-neighborhood" placeholder="Localidad" required>
         </div>
-          <input type="hidden" name="userApp" id="userInput">
         <div class="mb-3">
-          <input type="submit" value="Modificar Propietario"> 
+          <input type="submit" value="Modificar Veterinaria"> 
         </div>
       </form>
     </div>
@@ -73,24 +72,23 @@
 <script>
 
   let userApp= JSON.parse(window.sessionStorage.getItem("userApp"));
-  let xml= new XMLHttpRequest();
+  let xhr= new XMLHttpRequest();
   let form= document.getElementById("form");
 
   function submitForm(){
-    document.getElementById("userInput").value= userApp.username;
-    xml.onreadystatechange=function(){
-      if(xml.readyState==4){
-        if(xml.status==200){
-          alert("Propietario modificado exitosamente");
-          window.location.href="./ownerIndex.html";
+    xhr.onreadystatechange=function(){
+      if(xhr.readyState==4){
+        if(xhr.status==200){
+          alert("Veterinaria modificada exitosamente");
+          window.location.href="./veterinaryIndex.html";
         }else{
-          alert("Ocurrio un error: " +xml.responseText);
+          alert("Ocurrio un error: " +xhr.responseText);
           form.reset();
         }
       }
     }
-    xml.open('POST', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/owner/'+userApp.username);
-    xml.send(new FormData(form));
+    xhr.open('POST', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/veterinary/'+userApp.username);
+    xhr.send(new FormData(form));
   }
 </script>
 
