@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +9,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
     crossorigin="anonymous"></script>
-  <title>Formulario de Casos</title>
+  <title>Mascotas</title>
 </head>
-
 <body>
 
   <div class="container" id="navBar">
@@ -35,7 +33,8 @@
               <a class="nav-link active" aria-current="page" href="./ownerForm.html">Crear Propietario</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="../veterinary/veterinaryForm.html"">Crear Veterinaria</a>
+              <a class="nav-link active" aria-current="page" href="../veterinary/veterinaryForm.html">Crear
+                Veterinaria</a>
             </li>
           </ul>
         </div>
@@ -44,29 +43,45 @@
   </div>
 
 
-  <div class=" container" id="Loggin" style="display: flex; justify-content: center;">
-                <div class=" col align-self-center col-sm-4">
-                  <form action="" method="POST" id="form"
-                    style="border-style: solid; padding: 10px; border-color: darkgray;">
-                    <div class="mb-3">
-                      <label for="formType" class="form-label">Tipo: </label>
-                      <select name="formType" id="formType">
-                        <option value="stole">Robo</option>
-                        <option value="lost">Perdida</option>
-                        <option value="decease">Fallecimiento</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label for="formDescription" class="form-label">Descripción: </label>
-                      <input type="text" class="form-control" id="formDescription" placeholder="Descripción" required>
-                    </div>
-                    <div class="mb-3">
-                      <input type="submit" value="Crear Propietario">
-                    </div>
-                  </form>
-                </div>
-        </div>
-
+  <div class="container">
+    <button onclick="window.location.href='./petForm.html';">Crear Mascota</button>
+  </div>
+  
 </body>
+
+<script>
+  let userApp= JSON.stringify(window.sessionStorage.getItem("userApp"));
+  let xhr= new XMLHttpRequest();
+  function makeTable(elementId, columns, actions){
+    xhr.onreadystatechange= function(){
+      if(xhr.readyState==4){
+        let pet= JSON.parse(xhr.responseText);
+        let tableBody= document.getElementById("talbePets").getElementsByTagName("tbody")[0];
+
+        pet.map(p => {
+          let newRow= tableBody.insertRow();
+
+          columns.map(c => {
+            let cell= newRow.insertCell();
+            let text= document.createTextNode(p[c]);
+            cell.appendChild(text);
+          });
+
+          if(actions.includes("createCase")){
+            let cell= newRow.insertCell();
+            let action= document.createElement('button');
+            action.setAttribute('onclick', 'location.href=""');
+            let text= document.createTextNode("Crear Caso");
+            action.appendChild(text);
+            cell.appendChild(action);
+          }
+        });
+      }
+    }
+  }
+
+  xhr.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/'+userApp.username+'/owner/pets');
+  xhr.send();
+</script>
 
 </html>
