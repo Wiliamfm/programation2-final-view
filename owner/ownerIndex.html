@@ -169,7 +169,7 @@
             if(actions.includes("seeInfo")){
               let cell= newRow.insertCell();
               let action= document.createElement('button');
-              action.setAttribute('onclick','window.sessionStorage.setItem("petId",'+p.id+');location.href="./petIndex.html";');
+              action.setAttribute('onclick','window.sessionStorage.setItem("petId",'+p.id+');');
               let text= document.createTextNode("Ver Información");
               action.appendChild(text);
               cell.appendChild(action);
