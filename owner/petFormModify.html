@@ -93,7 +93,7 @@
         </div>
           <input type="hidden" name="ownerId" id="inputOwner">
         <div class="mb-3">
-          <input type="submit" value="Crear Mascota">
+          <input type="submit" value="Modificar Mascota">
         </div>
       </form>
     </div>
@@ -110,7 +110,7 @@
     let inputOwner= document.getElementById("inputOwner").value=userApp.username;
     xml.onreadystatechange= function(){
       if(xml.readyState==4){
-        if(xml.status==201){
+        if(xml.status==200){
         alert("Mascota creada con éxito");
         window.location.href='./ownerIndex.html';
         }else{
@@ -118,7 +118,7 @@
         }
       }
     }
-    xml.open("POST", 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/owner/'+userApp.username+'/pets');
+    xml.open("POST", 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/owner/'+userApp.username+'/pets/'+window.sessionStorage.getItem("petId"));
     xml.send(new FormData(form));
   }
 </script>

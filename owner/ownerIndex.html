@@ -44,16 +44,20 @@
     </nav>
   </div>
 
-  <div class="container text-center">
-    <h2>Información del propietario</h2>
-    <br>
-    <h3>Nombre:</h3>
-    <br>
-    <h3>Dirección:</h3>
-    <br>
-    <h3>Localidad:</h3>
-    <br>
+  <div class="container" style="border-style: solid; padding: 10px;">
     <div class="container">
+      <h2 class="text-center">Información del propietario</h2>
+      <br>
+    </div>
+    <div class="container">
+      <h3>Nombre:</h3>
+      <br>
+      <h3>Dirección:</h3>
+      <br>
+      <h3>Localidad:</h3>
+    </div>
+    <br>
+    <div class="container" style="padding: 10px;">
       <button class='btn btn-primary' onclick="modify()">Modificar Información</button>
       <button class="btn btn-primary" onclick="location.href='./petForm.html';">Añadir Mascota</button>
     </div>
@@ -103,6 +107,7 @@
 <script>
   xl= new XMLHttpRequest();
   userApp= JSON.parse(window.sessionStorage.getItem('userApp'));
+  window.sessionStorage.removeItem("petId");
 
   xl.onreadystatechange= function(){
     if(this.readyState==4){
@@ -116,7 +121,7 @@
           document.getElementsByTagName('h3')[0].innerHTML="Nombre: "+owner.name;
           document.getElementsByTagName('h3')[1].innerHTML="Dirección: "+owner.address;
           document.getElementsByTagName('h3')[2].innerHTML="Localidad: "+owner.neighborhood;
-          showPets('tablePets', ['name', 'microship', 'specie', 'race', 'size', 'sex', 'picture'], ['createCase']);
+          showPets('tablePets', ['name', 'microship', 'specie', 'race', 'size', 'sex', 'picture'], ['createCase', 'modify', 'seeInfo']);
         }
       }
     }
@@ -148,8 +153,24 @@
             if(actions.includes("createCase")){
               let cell= newRow.insertCell();
               let action= document.createElement('button');
-              action.setAttribute('onclick', 'location.href=./caseForm.html');
+              action.setAttribute('onclick','window.sessionStorage.setItem("petId",'+p.id+');location.href="./caseForm.html";');
               let text= document.createTextNode("Crear Caso");
+              action.appendChild(text);
+              cell.appendChild(action);
+            }
+            if(actions.includes("modify")){
+              let cell= newRow.insertCell();
+              let action= document.createElement('button');
+              action.setAttribute('onclick','window.sessionStorage.setItem("petId",'+p.id+');location.href="./petFormModify.html";');
+              let text= document.createTextNode("Modificar Información");
+              action.appendChild(text);
+              cell.appendChild(action);
+            }
+            if(actions.includes("seeInfo")){
+              let cell= newRow.insertCell();
+              let action= document.createElement('button');
+              action.setAttribute('onclick','window.sessionStorage.setItem("petId",'+p.id+');location.href="./petIndex.html";');
+              let text= document.createTextNode("Ver Información");
               action.appendChild(text);
               cell.appendChild(action);
             }
