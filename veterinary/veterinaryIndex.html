@@ -114,7 +114,7 @@
     }
   };
 
-  xl.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/veterinary/'+userApp.username);
+  xl.open('GET', 'http://35.206.97.221:8080/FourPawsCitizens-FinalWeb/4citizens/veterinary/'+userApp.username);
   xl.send();
 
   function modify(){
@@ -143,7 +143,7 @@
         }
       }
     }
-    xml.open('GET', 'http://localhost:8080/demo-1.0-SNAPSHOT/4citizens/veterinary/'+userApp.username+'/visits');
+    xml.open('GET', 'http://35.206.97.221:8080/FourPawsCitizens-FinalWeb/4citizens/veterinary/'+userApp.username+'/visits');
     xml.send();
   }
   
