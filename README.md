@@ -18,6 +18,11 @@
 - hibernate 5.4.30
 - WildFly 23.0.1
 - Postgresql 42.2.10
+- Postgresql 42.2.10
+
+## Link del Video:
+
+- https://youtu.be/TkqDEp5AEoY
 
 ## Repositorio de la lógica:
 
