@@ -4,6 +4,7 @@
 
 - La aplicación soporta todas las operaciones básicas como listar, crear, modificar.
 - No incluye la subida de fotografías ni filtros para listar.
+- No se pudo desplegar la aplicación en el servidor remoto, por lo que quedó configurada para localHost, (se logró crear el datasource pero al probar la conexión no se lograba conectar (finalWeb)). 
 
 ## Integrantes:
 
